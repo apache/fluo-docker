@@ -1,4 +1,4 @@
-# Fluo Docker Image
+# Apache Fluo Docker Image
 
 ## Obtain the Docker image
 
@@ -22,7 +22,7 @@ building an image:
 
 1. Clone the Fluo docker repo
 
-        git clone git@github.com:mikewalch/fluo-docker.git
+        git clone git@github.com:apache/fluo-docker.git
 
 2. Until Fluo 1.2 is released, build a Fluo tarball distribution and copy it to the root
    directory of the repo.
