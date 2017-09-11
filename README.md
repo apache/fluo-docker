@@ -17,13 +17,15 @@ While it is easier to pull from DockerHub, the image will default to the softwar
 | [Zookeeper] | 3.4.9          |
 
 If these versions do not match what is running on your cluster, you should consider building
-your own image with matching versions. Below are instructions for building an image:
+your own image with matching versions. However, Fluo must be 1.2+. Below are instructions for
+building an image:
 
 1. Clone the Fluo docker repo
 
         git clone git@github.com:mikewalch/fluo-docker.git
 
-2. Build a Fluo tarball distribution and copy it to the root directory of the repo.
+2. Until Fluo 1.2 is released, build a Fluo tarball distribution and copy it to the root
+   directory of the repo.
 
         git clone git@github.com:apache/fluo.git
         cd fluo/
@@ -42,7 +44,7 @@ your own image with matching versions. Below are instructions for building an im
 ## Image basics
 
 The entrypoint for the Fluo docker image is the `fluo` script. While the primary use
-case for this image is start an oracle or worker, you can run other commands in the
+case for this image is to start an oracle or worker, you can run other commands in the
 `fluo` script to test out the image:
 
 ```bash
@@ -66,24 +68,24 @@ Use the `docker` command to start local docker containers.
 
 1. Start a Fluo oracle
 
-        docker run -d --network="host" mikewalch/fluo oracle -a myapp -D fluo.connection.zookeepers=zkhost/fluo
+        docker run -d --network="host" mikewalch/fluo oracle -a myapp -o fluo.connection.zookeepers=zkhost/fluo
 
 2. Start Fluo worker(s). Execute this command multiple times to start multiple workers.
 
-        docker run -d --network="host" mikewalch/fluo worker -a myapp -D fluo.connection.zookeepers=zkhost/fluo
+        docker run -d --network="host" mikewalch/fluo worker -a myapp -o fluo.connection.zookeepers=zkhost/fluo
 
 ## Marathon
 
-Using the Marathon UI, you can create applications using JSON configuration.
+Using the [Marathon] UI, you can create applications using JSON configuration.
 
 The JSON below can be used to start a Fluo oracle.
 
 ```json
 {
   "id": "myapp-fluo-oracle",
-  "cmd": "fluo oracle -a myapp -D fluo.connection.zookeepers=zkhost/fluo",
+  "cmd": "fluo oracle -a myapp -o fluo.connection.zookeepers=zkhost/fluo",
   "cpus": 1,
-  "mem": 128,
+  "mem": 256,
   "disk": 0,
   "instances": 1,
   "container": {
@@ -101,9 +103,9 @@ The JSON below can be used to start Fluo worker(s). Modify instances to start mu
 ```json
 {
   "id": "myapp-fluo-worker",
-  "cmd": "fluo worker -a myapp -D fluo.connection.zookeepers=zkhost/fluo",
+  "cmd": "fluo worker -a myapp -o fluo.connection.zookeepers=zkhost/fluo",
   "cpus": 1,
-  "mem": 128,
+  "mem": 512,
   "disk": 0,
   "instances": 1,
   "container": {
@@ -121,3 +123,4 @@ The JSON below can be used to start Fluo worker(s). Modify instances to start mu
 [Hadoop]: https://hadoop.apache.org/
 [Zookeeper]: https://zookeeper.apache.org/
 [application]: https://github.com/apache/fluo/blob/master/docs/applications.md
+[Marathon]: https://mesosphere.github.io/marathon/
