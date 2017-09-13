@@ -1,6 +1,6 @@
 # Apache Fluo Docker Image
 
-This is currently a work in progress that depends on unreleased features of Fluo.  It will not be ready for use until after Fluo 1.2.0 is released.  Sometime after Fluo 1.2.0 is released this project will make its first release.
+This is currently a work in progress that depends on unreleased features of Fluo.  It will not be ready for use until after Fluo 1.2.0 is released.  Sometime after Fluo 1.2.0 is released this project will make its first release.  The `mikewalch/fluo` DockerHub image is only for pre-release testing and is not a release.  Eventually this will project will create a `apache/fluo` image at DockerHub.
 
 ## Obtain the Docker image
 
