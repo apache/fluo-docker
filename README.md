@@ -27,6 +27,7 @@ While it is easier to pull from DockerHub, the image will default to the softwar
 If these versions do not match what is running on your cluster, you should consider building
 your own image with matching versions. However, Fluo must be 1.2+.
 
+<!-- This section name should be stable as it's linked to from the web docs -->
 ## Build the Docker image
 
 Below are instructions for building an image:
