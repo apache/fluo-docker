@@ -28,7 +28,7 @@ RUN curl -sL http://archive.apache.org/dist/hadoop/core/hadoop-$HADOOP_VERSION/h
 RUN curl -sL http://archive.apache.org/dist/zookeeper/zookeeper-$ZOOKEEPER_VERSION/zookeeper-$ZOOKEEPER_VERSION.tar.gz | tar -xzC /tmp
 RUN curl -sL http://archive.apache.org/dist/accumulo/$ACCUMULO_VERSION/accumulo-$ACCUMULO_VERSION-bin.tar.gz | tar -xzC /tmp
 #RUN curl -sL http://archive.apache.org/dist/fluo/fluo/$FLUO_VERSION/fluo-$FLUO_VERSION-bin.tar.gz | tar -xzC /tmp
-# Comment out line above and remove line below in 1.2.0 is released
+# Comment out line above and remove line below when 1.2.0 is released
 ADD ./fluo-$FLUO_VERSION-bin.tar.gz /tmp/
 
 RUN mv /tmp/hadoop-$HADOOP_VERSION /opt/hadoop
