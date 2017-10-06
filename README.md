@@ -6,7 +6,7 @@ This project creates the official [Apache Fluo][Fluo] docker image.
 
 ## Getting Started
 
-* [Documentation] for running a Fluo application in Docker
+* [Documentation][docs] for running a Fluo application in Docker
 
 ## Obtain the Docker image
 
@@ -55,10 +55,10 @@ Below are instructions for building an image:
 
 ## Next steps
 
-Read the [Documentation] for instructions on how run Fluo using docker.
+Read the [documentation][docs] for instructions on how run Fluo using docker.
 
 [Fluo]: https://fluo.apache.org/
 [Accumulo]: https://accumulo.apache.org/
 [Hadoop]: https://hadoop.apache.org/
 [Zookeeper]: https://zookeeper.apache.org/
-[Documentation]: https://fluo.apache.org/docs/fluo/1.2/administration/run-fluo-in-docker/
+[docs]: https://fluo.apache.org/docs/fluo/1.2/administration/run-fluo-in-docker
