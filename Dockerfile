@@ -24,10 +24,37 @@ ENV ZOOKEEPER_VERSION ${ZOOKEEPER_VERSION:-3.4.9}
 ENV ACCUMULO_VERSION ${ACCUMULO_VERSION:-1.8.1}
 ENV FLUO_VERSION 1.2.0-SNAPSHOT
 
-RUN curl -sL http://archive.apache.org/dist/hadoop/core/hadoop-$HADOOP_VERSION/hadoop-$HADOOP_VERSION.tar.gz | tar -xzC /tmp
-RUN curl -sL http://archive.apache.org/dist/zookeeper/zookeeper-$ZOOKEEPER_VERSION/zookeeper-$ZOOKEEPER_VERSION.tar.gz | tar -xzC /tmp
-RUN curl -sL http://archive.apache.org/dist/accumulo/$ACCUMULO_VERSION/accumulo-$ACCUMULO_VERSION-bin.tar.gz | tar -xzC /tmp
-#RUN curl -sL http://archive.apache.org/dist/fluo/fluo/$FLUO_VERSION/fluo-$FLUO_VERSION-bin.tar.gz | tar -xzC /tmp
+# Download from Apache mirrors instead of archive #9
+ENV APACHE_DIST_URLS \
+  https://www.apache.org/dyn/closer.cgi?action=download&filename= \
+# if the version is outdated (or we're grabbing the .asc file), we might have to pull from the dist/archive :/
+  https://www-us.apache.org/dist/ \
+  https://www.apache.org/dist/ \
+https://archive.apache.org/dist/
+
+RUN set -eux; \
+  download_bin() { \
+    local f="$1"; shift; \
+    local distFile="$1"; shift; \
+    local success=; \
+    local distUrl=; \
+    for distUrl in $APACHE_DIST_URLS; do \
+      if wget -nv -O "$f" "$distUrl$distFile"; then \
+        success=1; \
+        break; \
+      fi; \
+    done; \
+    [ -n "$success" ]; \
+  };\
+   \
+   download_bin "accumulo.tar.gz" "accumulo/$ACCUMULO_VERSION/accumulo-$ACCUMULO_VERSION-bin.tar.gz"; \
+   download_bin "hadoop.tar.gz" "hadoop/core/hadoop-$HADOOP_VERSION/hadoop-$HADOOP_VERSION.tar.gz"; \
+   download_bin "zookeeper.tar.gz" "zookeeper/zookeeper-$ZOOKEEPER_VERSION/zookeeper-$ZOOKEEPER_VERSION.tar.gz"
+
+RUN tar xzf accumulo.tar.gz -C /tmp/
+RUN tar xzf hadoop.tar.gz -C /tmp/
+RUN tar xzf zookeeper.tar.gz -C /tmp/
+
 # Comment out line above and remove line below when 1.2.0 is released
 ADD ./fluo-$FLUO_VERSION-bin.tar.gz /tmp/
 
