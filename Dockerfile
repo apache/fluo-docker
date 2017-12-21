@@ -19,10 +19,20 @@ ARG HADOOP_VERSION
 ARG ZOOKEEPER_VERSION
 ARG ACCUMULO_VERSION
 
+ARG HADOOP_HASH
+ARG ZOOKEEPER_HASH
+ARG ACCUMULO_HASH
+
 ENV HADOOP_VERSION ${HADOOP_VERSION:-2.7.3}
 ENV ZOOKEEPER_VERSION ${ZOOKEEPER_VERSION:-3.4.9}
 ENV ACCUMULO_VERSION ${ACCUMULO_VERSION:-1.8.1}
 ENV FLUO_VERSION 1.2.0-SNAPSHOT
+
+ENV HADOOP_HASH ${HADOOP_HASH:-b84b898934269c68753e4e036d21395e5a4ab5b1}
+ENV ZOOKEEPER_HASH ${ZOOKEEPER_HASH:-0285717bf5ea87a7a36936bf37851d214a32bb99}
+ENV ACCUMULO_HASH ${ACCUMULO_HASH:-8e6b4f5d9bd0c41ca9a206e876553d8b39923528}
+# Change and uncomment next line when 1.2.0 is released
+# ENV FLUO_HASH ${FLUO_HASH:-xxx}
 
 # Download from Apache mirrors instead of archive #9
 ENV APACHE_DIST_URLS \
@@ -35,21 +45,24 @@ https://archive.apache.org/dist/
 RUN set -eux; \
   download_bin() { \
     local f="$1"; shift; \
+    local hash="$1"; shift; \
     local distFile="$1"; shift; \
     local success=; \
     local distUrl=; \
     for distUrl in $APACHE_DIST_URLS; do \
       if wget -nv -O "$f" "$distUrl$distFile"; then \
         success=1; \
+        # Checksum the download
+        echo "$hash" "*$f" | sha1sum -c -; \
         break; \
       fi; \
     done; \
     [ -n "$success" ]; \
   };\
    \
-   download_bin "accumulo.tar.gz" "accumulo/$ACCUMULO_VERSION/accumulo-$ACCUMULO_VERSION-bin.tar.gz"; \
-   download_bin "hadoop.tar.gz" "hadoop/core/hadoop-$HADOOP_VERSION/hadoop-$HADOOP_VERSION.tar.gz"; \
-   download_bin "zookeeper.tar.gz" "zookeeper/zookeeper-$ZOOKEEPER_VERSION/zookeeper-$ZOOKEEPER_VERSION.tar.gz"
+   download_bin "accumulo.tar.gz" "$ACCUMULO_HASH" "accumulo/$ACCUMULO_VERSION/accumulo-$ACCUMULO_VERSION-bin.tar.gz"; \
+   download_bin "hadoop.tar.gz" "$HADOOP_HASH" "hadoop/core/hadoop-$HADOOP_VERSION/hadoop-$HADOOP_VERSION.tar.gz"; \
+   download_bin "zookeeper.tar.gz" "$ZOOKEEPER_HASH" "zookeeper/zookeeper-$ZOOKEEPER_VERSION/zookeeper-$ZOOKEEPER_VERSION.tar.gz"
 
 RUN tar xzf accumulo.tar.gz -C /tmp/
 RUN tar xzf hadoop.tar.gz -C /tmp/
