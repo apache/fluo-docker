@@ -18,21 +18,22 @@ FROM openjdk:8
 ARG HADOOP_VERSION
 ARG ZOOKEEPER_VERSION
 ARG ACCUMULO_VERSION
+ARG FLUO_VERSION
 
 ARG HADOOP_HASH
 ARG ZOOKEEPER_HASH
 ARG ACCUMULO_HASH
+ARG FLUO_HASH
 
 ENV HADOOP_VERSION ${HADOOP_VERSION:-2.7.5}
 ENV ZOOKEEPER_VERSION ${ZOOKEEPER_VERSION:-3.4.11}
 ENV ACCUMULO_VERSION ${ACCUMULO_VERSION:-1.8.1}
-ENV FLUO_VERSION 1.2.0-SNAPSHOT
+ENV FLUO_VERSION ${FLUO_VERSION:-1.2.0}
 
 ENV HADOOP_HASH ${HADOOP_HASH:-0f90ef671530c2aa42cde6da111e8e47e9cd659e}
 ENV ZOOKEEPER_HASH ${ZOOKEEPER_HASH:-9268b4aed71dccad3d7da5bfa5573b66d2c9b565}
 ENV ACCUMULO_HASH ${ACCUMULO_HASH:-8e6b4f5d9bd0c41ca9a206e876553d8b39923528}
-# Change and uncomment next line when 1.2.0 is released
-# ENV FLUO_HASH ${FLUO_HASH:-xxx}
+ENV FLUO_HASH ${FLUO_HASH:-a89cb7f76007e8fdd0860a4d5c4e1743d1a30459}
 
 # Download from Apache mirrors instead of archive #9
 ENV APACHE_DIST_URLS \
@@ -40,7 +41,7 @@ ENV APACHE_DIST_URLS \
 # if the version is outdated (or we're grabbing the .asc file), we might have to pull from the dist/archive :/
   https://www-us.apache.org/dist/ \
   https://www.apache.org/dist/ \
-https://archive.apache.org/dist/
+  https://archive.apache.org/dist/
 
 RUN set -eux; \
   download_bin() { \
@@ -60,16 +61,15 @@ RUN set -eux; \
     [ -n "$success" ]; \
   };\
    \
-   download_bin "accumulo.tar.gz" "$ACCUMULO_HASH" "accumulo/$ACCUMULO_VERSION/accumulo-$ACCUMULO_VERSION-bin.tar.gz"; \
    download_bin "hadoop.tar.gz" "$HADOOP_HASH" "hadoop/core/hadoop-$HADOOP_VERSION/hadoop-$HADOOP_VERSION.tar.gz"; \
-   download_bin "zookeeper.tar.gz" "$ZOOKEEPER_HASH" "zookeeper/zookeeper-$ZOOKEEPER_VERSION/zookeeper-$ZOOKEEPER_VERSION.tar.gz"
+   download_bin "zookeeper.tar.gz" "$ZOOKEEPER_HASH" "zookeeper/zookeeper-$ZOOKEEPER_VERSION/zookeeper-$ZOOKEEPER_VERSION.tar.gz"; \
+   download_bin "accumulo.tar.gz" "$ACCUMULO_HASH" "accumulo/$ACCUMULO_VERSION/accumulo-$ACCUMULO_VERSION-bin.tar.gz"; \
+   download_bin "fluo.tar.gz" "$FLUO_HASH" "fluo/fluo/$FLUO_VERSION/fluo-$FLUO_VERSION-bin.tar.gz";
 
-RUN tar xzf accumulo.tar.gz -C /tmp/
 RUN tar xzf hadoop.tar.gz -C /tmp/
 RUN tar xzf zookeeper.tar.gz -C /tmp/
-
-# Comment out line above and remove line below when 1.2.0 is released
-ADD ./fluo-$FLUO_VERSION-bin.tar.gz /tmp/
+RUN tar xzf accumulo.tar.gz -C /tmp/
+RUN tar xzf fluo.tar.gz -C /tmp/
 
 RUN mv /tmp/hadoop-$HADOOP_VERSION /opt/hadoop
 RUN mv /tmp/zookeeper-$ZOOKEEPER_VERSION /opt/zookeeper
