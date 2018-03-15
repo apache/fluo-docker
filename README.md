@@ -1,8 +1,6 @@
 # Apache Fluo Docker Image
 
-**This is currently a work in progress**. Eventually, this will project will create a `apache/fluo` image at DockerHub. Until then, you will need to build your own image.
-
-This project creates the official [Apache Fluo][Fluo] docker image.
+This project creates the [official Docker image][fluo-dockerhub] for [Apache Fluo][Fluo].
 
 ## Getting Started
 
@@ -11,7 +9,7 @@ This project creates the official [Apache Fluo][Fluo] docker image.
 ## Obtain the Docker image
 
 To obtain the docker image created by this project, you can either pull it from DockerHub at
-`apache/fluo` or build it yourself. To pull the image from DockerHub, run the command below:
+[apache/fluo][fluo-dockerhub] or build it yourself. To pull the image from DockerHub, run the command below:
 
     docker pull apache/fluo
 
@@ -60,6 +58,7 @@ Below are instructions for building an image:
 
 Read the [documentation][docs] for instructions on how run Fluo using docker.
 
+[fluo-dockerhub]: https://hub.docker.com/r/apache/fluo/
 [Fluo]: https://fluo.apache.org/
 [Accumulo]: https://accumulo.apache.org/
 [Hadoop]: https://hadoop.apache.org/
