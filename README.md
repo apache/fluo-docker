@@ -13,14 +13,16 @@ To obtain the docker image created by this project, you can either pull it from 
 
     docker pull apache/fluo
 
-While it is easier to pull from DockerHub, the image will default to the software versions below:
+While it is easier to pull from DockerHub, it may not have the versions of
+Hadoop, Zookeeper, and Accumulo you are using.  The Dockerfile has the software
+versions below:
 
 | Software    | Version |
 |-------------|---------|
 | [Fluo]      | 1.2.0   |
-| [Accumulo]  | 1.8.1   |
-| [Hadoop]    | 2.7.5   |
-| [Zookeeper] | 3.4.11  |
+| [Accumulo]  | 1.9.2   |
+| [Hadoop]    | 2.8.5   |
+| [Zookeeper] | 3.4.13  |
 
 If these versions do not match what is running on your cluster, you should consider building
 your own image with matching versions. However, Fluo must be 1.2+.
@@ -52,7 +54,8 @@ Below are instructions for building an image:
         --build-arg FLUO_HASH=a89cb7f76007e8fdd0860a4d5c4e1743d1a30459 \
         -t fluo .
 
-   Don't forget to update the HASH of the chosen version. We use SHA1 to validate the hash.
+   Don't forget to update the HASH of the chosen version. We use SHA1 to validate the hash. If you need to
+   test an unreleased version of Fluo, then use the `FLUO_FILE` build argument instead of `FLUO_HASH`.
 
 ## Next steps
 
