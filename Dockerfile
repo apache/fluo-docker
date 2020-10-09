@@ -62,16 +62,16 @@ RUN set -eux; \
      download_bin "fluo.tar.gz" "$FLUO_HASH" "fluo/fluo/$FLUO_VERSION/fluo-$FLUO_VERSION-bin.tar.gz"; \
    else \
      cp "/tmp/$FLUO_FILE" "fluo.tar.gz"; \
-   fi
-RUN tar xzf hadoop.tar.gz -C /tmp/
-RUN tar xzf zookeeper.tar.gz -C /tmp/
-RUN tar xzf accumulo.tar.gz -C /tmp/
-RUN tar xzf fluo.tar.gz -C /tmp/
-
-RUN mv /tmp/hadoop-$HADOOP_VERSION /opt/hadoop
-RUN mv /tmp/zookeeper-$ZOOKEEPER_VERSION /opt/zookeeper
-RUN mv /tmp/accumulo-$ACCUMULO_VERSION /opt/accumulo
-RUN mv /tmp/fluo-$FLUO_VERSION /opt/fluo
+   fi && \
+  tar xzf hadoop.tar.gz -C /tmp/ && \
+  tar xzf zookeeper.tar.gz -C /tmp/ && \
+  tar xzf accumulo.tar.gz -C /tmp/ && \
+  tar xzf fluo.tar.gz -C /tmp/ && \
+  mv /tmp/hadoop-$HADOOP_VERSION /opt/hadoop && \
+  mv /tmp/zookeeper-$ZOOKEEPER_VERSION /opt/zookeeper && \
+  mv /tmp/accumulo-$ACCUMULO_VERSION /opt/accumulo && \
+  mv /tmp/fluo-$FLUO_VERSION /opt/fluo && \
+  /opt/fluo/lib/fetch.sh extra
 
 ENV HADOOP_PREFIX /opt/hadoop
 ENV HADOOP_HOME /opt/hadoop
@@ -79,8 +79,6 @@ ENV ZOOKEEPER_HOME /opt/zookeeper
 ENV ACCUMULO_HOME /opt/accumulo
 ENV FLUO_HOME /opt/fluo
 ENV PATH "$PATH:$FLUO_HOME/bin"
-
-RUN /opt/fluo/lib/fetch.sh extra
 
 ENTRYPOINT ["fluo"]
 CMD ["help"]
